@@ -7,59 +7,66 @@
 
 import UIKit
 
+enum CurrentLight {
+    case red, yellow, green
+}
 class ViewController: UIViewController {
 
     
-    //MARK: VARAIBLES
-    let redView : UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .red
-        return view
-    }()
+    @IBOutlet weak var redLight: UIView!
+    @IBOutlet weak var yellowLight: UIView!
+    @IBOutlet weak var greenLight: UIView!
+    @IBOutlet weak var button: UIButton!
     
-    let greenView :UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .green
-        return view
-    }()
-    
+    private var currentLight = CurrentLight.red
+    private let lightIsOn : CGFloat = 1.0
+    private let lightIsOff : CGFloat = 0.3
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .black
         
-        view.addSubview(redView)
-        view.addSubview(greenView)
-        greenViewConstaints()
-        redViewConstraints()
-    }
-    
-    // MARK: COSTRAINTS
-    
-    func greenViewConstaints() {
-        //Constraints
-        let margins = view.layoutMarginsGuide
-        greenView.heightAnchor.constraint(equalTo: margins.heightAnchor, multiplier: 4/10).isActive = true
-        greenView.widthAnchor.constraint(equalTo: margins.widthAnchor, multiplier: 9/10).isActive = true
-        greenView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 20).isActive = true
-        greenView.topAnchor.constraint(equalTo: margins.topAnchor, constant: 50).isActive = true
-        greenView.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+        redLight.alpha = lightIsOff
+        yellowLight.alpha = lightIsOff
+        greenLight.alpha = lightIsOff
+        button.layer.cornerRadius = 10
+        button.setTitle("START", for: .normal)
         
+        redLight.layer.cornerRadius = redLight.frame.width / 2
+        yellowLight.layer.cornerRadius = yellowLight.frame.width / 2
+        greenLight.layer.cornerRadius = greenLight.frame.width / 2
     }
-
-    func redViewConstraints() {
-        let margins = view.layoutMarginsGuide
-        redView.heightAnchor.constraint(equalTo: margins.heightAnchor, multiplier: 4/10).isActive = true
-        redView.widthAnchor.constraint(equalTo: margins.widthAnchor, multiplier: 9/10).isActive = true
-        redView.topAnchor.constraint(equalTo: greenView.bottomAnchor, constant: 8).isActive = true
-        redView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 20).isActive = true
-        redView.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
-    }
+    
+//    override func viewWillLayoutSubviews() {
+//        redLight.layer.cornerRadius = redLight.frame.width / 2
+//        yellowLight.layer.cornerRadius = yellowLight.frame.width / 2
+//        greenLight.layer.cornerRadius = greenLight.frame.width / 2
+//    }
     
 
 
-
+    @IBAction func buttonPressed(_ sender: UIButton) {
+        button.setTitle("NEXT", for: .normal)
+    
+        switch currentLight {
+        case .red :
+            yellowLight.alpha = lightIsOff
+            redLight.alpha = lightIsOn
+            greenLight.alpha = lightIsOff
+            currentLight = .yellow
+        case .yellow :
+            greenLight.alpha = lightIsOff
+            yellowLight.alpha = lightIsOn
+            redLight.alpha = lightIsOff
+            currentLight = .green
+        case .green :
+            redLight.alpha = lightIsOff
+            greenLight.alpha = lightIsOn
+            yellowLight.alpha = lightIsOff
+            currentLight = .red
+        }
+    }
+        
+    
 }
 
